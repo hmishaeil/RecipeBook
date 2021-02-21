@@ -1,0 +1,16 @@
+<a style="cursor: pointer;" [routerLink]="recipe.id" routerLinkActive="active">
+  <div class="card" >
+    <div class="row no-gutters">
+      <div class="col-sm-3" style="background: white">
+        <img src="{{recipe.imagePath}}" class="card-img-top h-100" alt="...">
+        <!-- <img [src]="recipe.imagePath" class="card-img-top h-100" alt="..."> -->
+      </div>
+      <div class="col-sm-7">
+        <div class="card-body">
+          <h5 class="card-title">{{recipe.name}}</h5>
+          <p class="card-text">{{recipe.description}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</a>

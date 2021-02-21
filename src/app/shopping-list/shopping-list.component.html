@@ -1,0 +1,28 @@
+<div class="container bg">
+  <div class="row mt-5">
+    <div class="col">
+      <app-shopping-list-edit *ngIf="mode === 'edit'"></app-shopping-list-edit>
+      <app-shopping-list-add *ngIf="mode === 'add'"></app-shopping-list-add>
+      <hr>
+      <button class="btn btn-success mb-3" *ngIf="mode === 'edit'" (click)="mode='add'">Add More Item</button>
+      <ul *ngIf="items.length; else empty" class="list-group">
+        <li *ngFor="let item of items" class="list-group-item" >
+          <a  style="cursor: pointer;" 
+              (click)="onEdit(item)">
+              {{item.name}} ({{item.amount}})
+          </a>
+          <span *ngIf="mode !== 'edit'" class="float-right text-danger font-weight-bold border border-danger" 
+          style="cursor: pointer" (click)="onRemove(item)">X</span>
+        </li>
+
+          
+      </ul>
+      <ng-template #empty>
+        <div *ngIf="mode === 'empty'">
+          <p>Your list is empty, start creating the list by clicking below button.</p>
+          <button class="btn btn-success" (click)="mode='add'">Add</button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
