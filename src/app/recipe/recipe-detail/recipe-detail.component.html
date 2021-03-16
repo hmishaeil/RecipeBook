@@ -1,39 +1,45 @@
-<div class="row">
-  <div class="col">
-    <img src="{{incomingRecipe.imagePath}}" alt="" srcset="" class="img-responsive" style="width: 150px; height: 150px">
+<div class="container" *ngIf="incomingRecipe; else recipeStart">
+  <div class="row">
+    <div class="col">
+      <img src="{{incomingRecipe.imagePath}}" alt="" srcset="" class="img-responsive" style="width: 150px; height: 150px">
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col">
-    <h1>
-      {{incomingRecipe.name}}
-    </h1>
+  <div class="row">
+    <div class="col">
+      <h1>
+        {{incomingRecipe.name}}
+      </h1>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col">
-    <mat-form-field appearance="fill" appDropdown>
-      <mat-label>Manage</mat-label>
-      <mat-select>
-        <mat-option (click)="addIngToShoppingList()">To Shopping List</mat-option>
-        <mat-option [routerLink]="['edit']">Edit Recipe</mat-option>
-        <mat-option>To Shopping List 3</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <div class="row">
+    <div class="col">
+      <mat-form-field appearance="fill" appDropdown>
+        <mat-label>Manage</mat-label>
+        <mat-select>
+          <mat-option (click)="addIngToShoppingList()">To Shopping List</mat-option>
+          <mat-option [routerLink]="['edit']">Edit Recipe</mat-option>
+          <mat-option (click)="removeRecipeItem()">Delete</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col">
-    {{incomingRecipe.description}}
+  <div class="row">
+    <div class="col">
+      {{incomingRecipe.description}}
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col">
-    <div mat-subheader>Ingredients</div>
-    <mat-list role="list">
-      <mat-list-item role="listitem" *ngFor="let item of incomingRecipe.ingredients">
-        {{item.name }} - {{item.amount}}
-      </mat-list-item>
-    </mat-list>
+  <div class="row">
+    <div class="col">
+      <div mat-subheader>Ingredients</div>
+      <mat-list role="list">
+        <mat-list-item role="listitem" *ngFor="let item of incomingRecipe.ingredients">
+          {{item.name }} - {{item.amount}}
+        </mat-list-item>
+      </mat-list>
+    </div>
   </div>
+  
 </div>
+<ng-template #recipeStart>
+  <app-recipe-start></app-recipe-start>
+</ng-template>

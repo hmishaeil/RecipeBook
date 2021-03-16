@@ -17,9 +17,8 @@
       <mat-form-field appearance="fill" appDropdown mouseOverColor="pink">
         <mat-label>Manage</mat-label>
         <mat-select>
-          <mat-option *ngFor="let option of options" [value]="option.value">
-            {{option.viewValue}}
-          </mat-option>
+          <mat-option value="Fetch" (click)="fetch()">Fetch</mat-option>
+          <mat-option value="Save" (click)="save()">Save</mat-option>
         </mat-select>
       </mat-form-field>
     </ul>

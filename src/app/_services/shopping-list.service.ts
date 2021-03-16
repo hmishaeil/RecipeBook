@@ -7,15 +7,14 @@ import { Ingredient } from '../_models/ingredient.model';
 })
 export class ShoppingListService implements OnInit {
 
-  private ingredients: Ingredient[] = [
-  ]
+  ingredients: Ingredient[] = []
   
   ingredients$
   ingredient$
   ingToBeEdited$
 
   constructor() { 
-    // this.ingredients$ = new EventEmitter<any>();
+
     this.ingredients$ = new Subject<Ingredient[]>();
     this.ingredient$ = new Subject<Ingredient>();
     this.ingToBeEdited$ = new BehaviorSubject<Ingredient>(null);
@@ -29,7 +28,16 @@ export class ShoppingListService implements OnInit {
     this.ingredients.push(ingObj)
     this.ingredients$.next(this.ingredients)
 
-    console.log(this.ingredients)
+  }
+
+  addIngredients(ingredients: Ingredient[]){
+    ingredients.forEach(element => {
+      let id = this.ingredients.length;
+      const ingObj = new Ingredient(++id, element.name, element.amount)
+      this.ingredients.push(ingObj)
+    });
+
+
   }
 
   updateIngredient(ingredient: Ingredient){

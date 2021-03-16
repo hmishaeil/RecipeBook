@@ -1,3 +1,61 @@
-<p>
-  recipe-edit works!
-</p>
+<form [formGroup]="RecipeForm" (ngSubmit)="onSubmit()">
+  <img [src]="recipe.imagePath" style="width: 150px; height: 150px" alt="Recipe Image">
+  <div class="form-group">
+    <label for="recipeName">Recipe Name</label>
+    <input type="text" class="form-control" placeholder="Enter recipe name" formControlName="name" required>
+    <ul class="text-danger">
+      <li *ngIf="RecipeForm.controls['name'].invalid 
+      && RecipeForm.controls['name'].touched">
+        <span>
+          Required
+        </span>
+      </li>
+    </ul>
+  </div>
+  <div class="form-group">
+    <label for="recipeImage">Recipe Image</label>
+    <input type="text" class="form-control" placeholder="Enter recipe image url" formControlName="imagePath">
+  </div>
+  <div class="form-group">
+    <label for="recipeDescription">Recipe Description</label>
+    <input type="text" class="form-control" placeholder="Enter recipe description" formControlName="description"
+      #recipeDesc required>
+    <ul class="text-danger">
+      <li *ngIf="RecipeForm.controls['description'].invalid 
+      && RecipeForm.controls['description'].touched">
+        <span>
+          Required
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="row" *ngIf="RecipeForm.get('ingredients')['controls'].length">
+    <div class="col-md-6">
+      Ingredient Name
+    </div>
+    <div class="col-md-5">
+      Ingredient Amount
+    </div>
+  </div>
+
+  <div formArrayName="ingredients" *ngFor="let control of RecipeForm.get('ingredients')['controls']; 
+  index as i">
+    <div class="form-row" [formGroupName]="i">
+      <div class=" col-md-6">
+        <input type="text" formControlName="name" class="form-control" id="ingName" placeholder="Enter ingredient name">
+      </div>
+      <div class="form-group col-md-5">
+        <input type="number" formControlName="amount" class="form-control" id="ingAMount"
+          placeholder="Enter ingredient amount">
+      </div>
+      <div class="form-group col-md-1">
+        <button type="button" class="btn btn-danger" (click)="removeIngredientItem(i)">X</button>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-warning" [disabled]="!RecipeForm.valid" (click)="addIngredientItem()">Add
+    Ingredients</button>
+  <hr>
+  <button type="submit" class="btn btn-primary" [disabled]="!RecipeForm.valid">Update</button>
+</form>

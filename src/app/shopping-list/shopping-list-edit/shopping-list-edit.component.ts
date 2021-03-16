@@ -21,7 +21,6 @@ export class ShoppingListEditComponent implements OnInit, OnDestroy {
   constructor(private shoppingListService: ShoppingListService) { }
 
   ngOnInit(): void {
-    console.log('called init')
     this.sub = this.shoppingListService.ingToBeEdited$.subscribe(x => {
       this.id = x.id;
       this.ingName = x.name

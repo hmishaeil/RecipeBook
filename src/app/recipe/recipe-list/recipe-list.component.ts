@@ -12,26 +12,33 @@ export class RecipeListComponent implements OnInit {
 
   @Output() eventFromRecipeList = new EventEmitter<Recipe>();
 
-  editMode
-  id
+  editMode;
+  id;
 
   recipes: Recipe[] = [];
 
-  constructor(private recipeService: RecipeService, private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private activatedRoute: ActivatedRoute, 
+    private recipeService: RecipeService) {}
 
   ngOnInit() {
+    
     this.activatedRoute.params.subscribe(params => {
-      if (params['id']){
+      if (params['id']) {
         this.editMode = true;
         this.id = params['id']
       } else {
         this.editMode = false
       }
     })
-    this.recipes = this.recipeService.getRecipes();
-  }
 
-  onCreateRecipe() { }
+    this.recipeService.recipes$.subscribe(recipes => {
+      this.recipes = recipes;
+    })
+
+    this.recipeService.downloadRecipes();
+
+  }
 
   rcvdEventFromRecipeItem($event) {
     this.eventFromRecipeList.emit($event);

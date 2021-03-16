@@ -1,0 +1,72 @@
+<form [formGroup]="RecipeForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="recipeName">Recipe Name</label>
+    <input type="text" class="form-control" placeholder="Enter recipe name" formControlName="recipeName" required>
+    <ul class="text-danger">
+      <li *ngIf="RecipeForm.controls['recipeName'].invalid 
+      && RecipeForm.controls['recipeName'].touched">
+        <span>
+          Required
+        </span>
+      </li>
+    </ul>
+  </div>
+  <div class="form-group">
+    <label for="recipeDescription">Recipe Description</label>
+    <input type="text" class="form-control" placeholder="Enter recipe description" formControlName="recipeDesc" required>
+    <ul class="text-danger">
+      <li *ngIf="RecipeForm.controls['recipeDesc'].invalid 
+      && RecipeForm.controls['recipeDesc'].touched">
+        <span>
+          Required
+        </span>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="row" *ngIf="RecipeForm.get('IngredientItems')['controls'].length">
+    <div class="col-md-6">
+      Ingredient Name
+    </div>
+    <div class="col-md-5">
+      Ingredient Amount
+    </div>
+  </div>
+  <div formArrayName="IngredientItems" *ngFor="let control of RecipeForm.get('IngredientItems')['controls']; 
+  index as i">
+    <div class="form-row" [formGroupName]="i">
+      <div class=" col-md-6">
+        <input type="text" formControlName="ingName" class="form-control" id="ingName"
+          placeholder="Enter ingredient name" required>
+          <ul class="text-danger">
+            <li *ngIf="RecipeForm.controls['IngredientItems'].controls[i].controls['ingName'].invalid 
+            && RecipeForm.controls['IngredientItems'].controls[i].controls['ingName'].touched">
+              <span>
+                Required
+              </span>
+            </li>
+          </ul>
+      </div>
+      <div class="form-group col-md-5">
+        <input type="number" formControlName="ingAmount" class="form-control" id="ingAMount"
+          placeholder="Enter ingredient amount" required>
+          <ul class="text-danger">
+            <li *ngIf="RecipeForm.controls['IngredientItems'].controls[i].controls['ingAmount'].invalid 
+            && RecipeForm.controls['IngredientItems'].controls[i].controls['ingAmount'].touched">
+              <span>
+                Invalid input
+              </span>
+            </li>
+          </ul>
+      </div>
+      <div class="form-group col-md-1">
+        <button type="button" class="btn btn-danger" (click)="removeIngredientItem(i)">X</button>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-warning" 
+  [disabled]="!RecipeForm.valid" (click)="addIngredientItem()">{{addBtnLabel}}</button>
+  <hr>
+  <button type="submit" class="btn btn-primary" [disabled]="!RecipeForm.valid">Create</button>
+  <a type="button" class="btn btn-danger ml-2" routerLink="/recipes">Cancel</a>
+</form>

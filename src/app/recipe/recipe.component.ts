@@ -16,7 +16,6 @@ export class RecipeComponent implements OnInit {
   ngOnInit() {
     this.recipeService.getRecipeEvent.subscribe(recipe =>{
       this.rcvdRecipe = recipe
-      console.log('rcvd in recipe cmp')
     })
   }
 

@@ -1,5 +1,8 @@
 <div class="container bg">
-  <div class="row mt-5">
+  <div class="row">
+    <h1 class="text-muted mt-3">Your shopping list</h1>
+  </div>
+  <div class="row">
     <div class="col">
       <app-shopping-list-edit *ngIf="mode === 'edit'"></app-shopping-list-edit>
       <app-shopping-list-add *ngIf="mode === 'add'"></app-shopping-list-add>
@@ -14,8 +17,6 @@
           <span *ngIf="mode !== 'edit'" class="float-right text-danger font-weight-bold border border-danger" 
           style="cursor: pointer" (click)="onRemove(item)">X</span>
         </li>
-
-          
       </ul>
       <ng-template #empty>
         <div *ngIf="mode === 'empty'">

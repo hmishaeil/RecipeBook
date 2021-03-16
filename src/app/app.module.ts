@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -19,16 +20,20 @@ import { ResolveService } from './_services/resolve.service';
 import { RecipeStartComponent } from './recipe/recipe-start/recipe-start.component';
 import { RecipeEditComponent } from './recipe/recipe-edit/recipe-edit.component';
 import { ShoppingListAddComponent } from './shopping-list/shopping-list-add/shopping-list-add.component';
+import { RecipeAddComponent } from './recipe/recipe-add/recipe-add.component';
+import { HttpClientModule } from '@angular/common/http';
 
 const appRoute = [
   {path: '', redirectTo: '/recipes', pathMatch: 'full'},
   {path: 'recipes', component: RecipeComponent, children: [
     {path: '',  component: RecipeStartComponent},
-    {path: 'new',  component: RecipeEditComponent, pathMatch: 'full'},
+    {path: 'new',  component: RecipeAddComponent, pathMatch: 'full'},
     {path: ':id', component: RecipeDetailComponent, resolve: {
-      data: ResolveService
+      resolver: ResolveService
     }},
-    {path: ':id/edit',  component: RecipeEditComponent, pathMatch: 'full' },
+    {path: ':id/edit',  component: RecipeEditComponent, pathMatch: 'full', resolve: {
+      resolver: ResolveService
+    } },
   ]},
   {path: 'recipes-list', component: RecipeListComponent},
   {path: 'recipes/recipe-detail', component: RecipeDetailComponent},
@@ -49,6 +54,7 @@ const appRoute = [
     DropdownDirective,
     RecipeEditComponent,
     ShoppingListAddComponent,
+    RecipeAddComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,6 +63,8 @@ const appRoute = [
     MatSelectModule,
     MatFormFieldModule,
     MatListModule,
+    ReactiveFormsModule,
+    HttpClientModule,
     RouterModule.forRoot(appRoute)
   ],
   providers: [],

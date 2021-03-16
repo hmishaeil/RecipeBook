@@ -1,4 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { DataStorageService } from '../_services/data-storage.service';
+import { RecipeService } from '../_services/recipe.service';
 
 @Component({
   selector: 'app-header',
@@ -10,16 +12,23 @@ export class HeaderComponent implements OnInit {
   @Output() menuSelected: EventEmitter<string> = new EventEmitter<string>();
 
   options = [
-    {'value': 'Action_1', 'viewValue': 'Action 1'},
-    {'value': 'Action_2', 'viewValue': 'Action 2'},
-    {'value': 'Action_3', 'viewValue': 'Action 3'},
+    {'value': 'fetchData', 'viewValue': 'Fetch Data'},
+    {'value': 'saveData', 'viewValue': 'Save Data'},
   ]
-  constructor() { }
+  constructor(private recipeService: RecipeService) { }
 
   ngOnInit() {
   }
 
   onSelectMenu(menuType: string){
     this.menuSelected.emit(menuType);
+  }
+
+  fetch(){
+    this.recipeService.downloadRecipes();
+  }
+
+  save(){
+    this.recipeService.uploadRecipes()
   }
 }

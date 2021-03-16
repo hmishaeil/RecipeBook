@@ -1,45 +1,78 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { Ingredient } from '../_models/ingredient.model';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Recipe } from '../_models/recipe.model';
+import { DataStorageService } from './data-storage.service';
+import { tap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService {
 
-  private recipes: Recipe[] = [
-    new Recipe(1, 'Scala 1', 'Scala Recipe 1', 'https://www.acouplecooks.com/wp-content/uploads/2019/05/Chopped-Salad-008.jpg', 
-    [
-      new Ingredient(1, 'Tomato', 2),
-      new Ingredient(2, 'Olives', 5),
-      new Ingredient(3, 'Bell Pepper', 1),
-    ]),
-    new Recipe(2, 'Scala 2', 'Scala Recipe 2', 'https://www.eatwell101.com/wp-content/uploads/2018/02/Apple-Almond-Feta-Spinach-Salad-Recipe.jpg', [
-      new Ingredient(1, 'Spinach', 1),
-      new Ingredient(2, 'Cheese', 5),
-      new Ingredient(3, 'Almond', 1),
-    ]),
-    new Recipe(3, 'Scala 3', 'Scala Recipe 3', 'https://www.wholesomeyum.com/wp-content/uploads/2020/03/wholesomeyum-chef-salad-recipe-4.jpg', [
-      new Ingredient(1, 'Egg', 2),
-      new Ingredient(2, 'Tomato', 4),
-      new Ingredient(3, 'Cheese', 3),
-    ])
-  ];
-  
+  private _recipes: Recipe[] = [];
+  get recipes() {
+    return this._recipes
+  }
+
+  recipeToEdit$: Subject<Recipe> = new Subject<Recipe>();
+  recipes$: BehaviorSubject<Recipe[]> = new BehaviorSubject<Recipe[]>(this.recipes);
+
   getRecipeEvent: EventEmitter<Recipe> = new EventEmitter<Recipe>();
-  
-  constructor() { }
 
-  getRecipes(){
-    return this.recipes.slice(); // return a copy of recipes and not a reference
+  constructor(private dataStorageService: DataStorageService) { }
+
+  initFetchRecipes() {
+    return this.dataStorageService.fetch().pipe(tap((recipes) => {
+      this._recipes = recipes;
+      this.recipes$.next(recipes)      
+    }));
+    
   }
 
-  addIngToShoppingList(ing: Ingredient[]){
+  downloadRecipes() {
+    this.dataStorageService.fetch().subscribe((recipes) => {
+      this._recipes = recipes;
+      this.recipes$.next(recipes)
+    })
+  }
+
+  uploadRecipes() {
+    this.dataStorageService.save(this.recipes).subscribe(data => console.log(data))
+  }
+
+  getRecipe(id): Recipe {
+    return this.recipes.find(recipe => recipe.id === +id);
+  }
+
+  addRecipe(recipe: Recipe) {
+    this.recipes.push(recipe)
+    this.recipes$.next(this.recipes);
+  }
+
+  getId() {
+    return this.recipes.length + 1;
+  }
+
+  updateRecipes(recipes: Recipe[]) {
+    this._recipes = recipes;
+    this.recipes$.next(this.recipes)
+  }
+
+  updateRecipe(recipe) {
+    let recipeIndex = this.recipes.findIndex(item => item.id === recipe.id)
+
+    this.recipes[recipeIndex].name = recipe.name;
+    this.recipes[recipeIndex].description = recipe.description;
+    this.recipes[recipeIndex].ingredients = recipe.ingredients;
 
   }
 
-  getRecipe(id: number): Recipe{
-    return this.recipes.find(recipe => recipe.id === id);
-  }
+  removeRecipe(recipe: Recipe) {
 
+    let filtered = this.recipes.filter(el => el.id !== recipe.id);
+
+    this._recipes = filtered;
+    this.recipes$.next(filtered);
+  }
 }
+
