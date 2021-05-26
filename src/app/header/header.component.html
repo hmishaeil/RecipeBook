@@ -6,19 +6,23 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/recipes" routerLinkActive="active">Recipes <span class="sr-only">(current)</span></a>
+      <li class="nav-item" *ngIf="!authenticated" >
+        <a class="nav-link" routerLink="/auth" routerLinkActive="active">Authenticate</a>
+      </li>
+      <li class="nav-item" *ngIf="authenticated">
+        <a class="nav-link" routerLink="/recipes" routerLinkActive="active" >Recipes <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="/shopping-list" routerLinkActive="active">Shopping List</a>
       </li>
     </ul>
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto"  *ngIf="authenticated">
       <mat-form-field appearance="fill" appDropdown mouseOverColor="pink">
         <mat-label>Manage</mat-label>
         <mat-select>
           <mat-option value="Fetch" (click)="fetch()">Fetch</mat-option>
           <mat-option value="Save" (click)="save()">Save</mat-option>
+          <mat-option value="Logout" (click)="logout()">Logout</mat-option>
         </mat-select>
       </mat-form-field>
     </ul>

@@ -21,11 +21,15 @@ import { RecipeStartComponent } from './recipe/recipe-start/recipe-start.compone
 import { RecipeEditComponent } from './recipe/recipe-edit/recipe-edit.component';
 import { ShoppingListAddComponent } from './shopping-list/shopping-list-add/shopping-list-add.component';
 import { RecipeAddComponent } from './recipe/recipe-add/recipe-add.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthComponent } from './auth/auth.component';
+import { LoadingComponent } from './loading/loading.component';
+import { AuthInterceptor } from './_interceptor/auth.interceptor';
+import { AuthGuard } from './_guard/auth.guard';
 
 const appRoute = [
   {path: '', redirectTo: '/recipes', pathMatch: 'full'},
-  {path: 'recipes', component: RecipeComponent, children: [
+  {path: 'recipes', component: RecipeComponent, canActivate:[AuthGuard], children: [
     {path: '',  component: RecipeStartComponent},
     {path: 'new',  component: RecipeAddComponent, pathMatch: 'full'},
     {path: ':id', component: RecipeDetailComponent, resolve: {
@@ -39,6 +43,7 @@ const appRoute = [
   {path: 'recipes/recipe-detail', component: RecipeDetailComponent},
   {path: 'shopping-list', component: ShoppingListComponent},
   {path: 'shopping-list/edit', component: ShoppingListEditComponent},
+  {path: 'auth', component: AuthComponent},
 ]
 @NgModule({
   declarations: [
@@ -55,6 +60,8 @@ const appRoute = [
     RecipeEditComponent,
     ShoppingListAddComponent,
     RecipeAddComponent,
+    AuthComponent,
+    LoadingComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,7 +74,13 @@ const appRoute = [
     HttpClientModule,
     RouterModule.forRoot(appRoute)
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
